@@ -18,6 +18,6 @@ public class HexoFrontMatter {
 
     public List<String> tags;
 
-    public List<String> categories;
+    public List<Object> categories;
 
 }

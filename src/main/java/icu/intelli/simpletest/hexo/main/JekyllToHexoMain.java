@@ -1,11 +1,12 @@
 package icu.intelli.simpletest.hexo.main;
 
 import icu.intelli.simpletest.hexo.entity.JekyllFrontMatter;
+import icu.intelli.simpletest.hexo.util.FontMatterUtil;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
 
-import java.io.*;
+import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Optional;
@@ -28,7 +29,9 @@ public class JekyllToHexoMain {
             File file = files[i];
             try {
                 String hexo = toHexo(file);
-                writeNewFile(file, hexo);
+                FontMatterUtil.replaceFontMatter(file,
+                        new File(newDirPath, file.getName().replaceAll("\\d{4}-\\d{2}-\\d{2}-", "")),
+                        hexo);
             } catch (Exception e) {
                 throw new RuntimeException(file.getAbsolutePath(), e);
             }
@@ -38,29 +41,8 @@ public class JekyllToHexoMain {
 
     }
 
-    private static void writeNewFile(File file, String hexo) {
-        int count = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(file));
-             BufferedWriter bw = new BufferedWriter(new FileWriter(new File(newDirPath, file.getName().replaceAll("\\d{4}-\\d{2}-\\d{2}-", ""))));) {
-            bw.write(hexo);
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (count == 2) {
-                    bw.write(line.concat("\n"));
-                    bw.flush();
-                }
-                if (line.startsWith("---")) {
-                    count++;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private static String toHexo(File file) {
-        String yamlStr = readYamlStr(file);
+        String yamlStr = FontMatterUtil.readYamlStr(file);
         JekyllFrontMatter jekyll = new Yaml().loadAs(yamlStr, JekyllFrontMatter.class);
         LinkedHashMap<String, Object> hexo = new LinkedHashMap<>();
         hexo.put("title", jekyll.title);
@@ -71,25 +53,5 @@ public class JekyllToHexoMain {
         return new Yaml().dumpAs(hexo, new Tag(Tag.PREFIX.concat("---")), DumperOptions.FlowStyle.BLOCK).substring(2).concat("---\n");
     }
 
-    private static String readYamlStr(File file) {
-        int count = 0;
-        StringBuffer sb = new StringBuffer();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.startsWith("---")) {
-                    count++;
-                    continue;
-                }
-                if (count == 2) {
-                    break;
-                }
-                sb.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(file.getAbsolutePath(), e);
-        }
-        return sb.toString();
-    }
 
 }
