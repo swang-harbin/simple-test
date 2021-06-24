@@ -19,6 +19,7 @@
         <hutool.version>4.5.16</hutool.version>
         <selenium.version>3.141.59</selenium.version>
         <commons-io.version>2.7</commons-io.version>
+        <pangu.version>1.1.0</pangu.version>
     </properties>
 
     <dependencies>
@@ -57,6 +58,10 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ws.vinta</groupId>
+            <artifactId>pangu</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -91,6 +96,12 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
+            </dependency>
+            <!-- 自动在 -->
+            <dependency>
+                <groupId>ws.vinta</groupId>
+                <artifactId>pangu</artifactId>
+                <version>${pangu.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
