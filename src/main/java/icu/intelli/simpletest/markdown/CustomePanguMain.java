@@ -1,7 +1,5 @@
 package icu.intelli.simpletest.markdown;
 
-import ws.vinta.pangu.Pangu;
-
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,9 +62,18 @@ public class CustomePanguMain {
             "([，。：；（）“”‘’【】、《》])" +
                     "\\s+"
     );
-    public static final File OLD_DIR = new File("/home/wangshuo/Projects/blog/content/posts");
 
-    public static final File NEW_DIR = new File("/home/wangshuo/Temporary/posts_new");
+    /**
+     * 以中文和.结尾的将.替换为。
+     */
+    public static final Pattern CJK_PERIOD = Pattern.compile(
+            "([\\p{InHiragana}\\p{InKatakana}\\p{InBopomofo}\\p{InCJKCompatibilityIdeographs}\\p{InCJKUnifiedIdeographs}])" +
+                    "\\.\\s*$"
+    );
+
+    public static final File OLD_DIR = new File("D:/001_code/002_study/blog/content/posts/MSB");
+
+    public static final File NEW_DIR = new File("C:/Users/wangshuo/Desktop/MSB");
 
     public static void main(String[] args) {
         doPangu(OLD_DIR);
@@ -139,6 +146,10 @@ public class CustomePanguMain {
             text = cacMatcher.replaceFirst("$1" + symbol + "$3");
             cacMatcher = CJK_ANS_CJK.matcher(text);
         }
+        // 以中文 + 英文句号结尾的，把英文句号换成中文的
+        Matcher cpMatcher = CJK_PERIOD.matcher(text);
+        text = cpMatcher.replaceAll("$1。");
+
         // 中文符号前后有空格的，去掉空格
         Matcher scMatcher = SPACE_CJK.matcher(text);
         text = scMatcher.replaceAll("$1");
