@@ -1,18 +1,15 @@
-package icu.intelli.simpletest.holder;
+package icu.intelli.simpletest.threadlocal;
 
 /**
- * 用于父子线程间共享对象
- *
  * @author wangshuo
- * @date 2021/07/01
+ * @date 2021/07/20
  */
 public class InheritableThreadLocalUtil {
-
 
     private InheritableThreadLocalUtil() {
     }
 
-    private static final ThreadLocal<Object> THREAD_LOCAL = new java.lang.InheritableThreadLocal<>();
+    private static final ThreadLocal<Object> THREAD_LOCAL = new InheritableThreadLocal<>();
 
     public static Object get() {
         return THREAD_LOCAL.get();
@@ -26,9 +23,4 @@ public class InheritableThreadLocalUtil {
         THREAD_LOCAL.remove();
     }
 
-    public static Object getAndRemove() {
-        Object obj = THREAD_LOCAL.get();
-        THREAD_LOCAL.remove();
-        return obj;
-    }
 }
