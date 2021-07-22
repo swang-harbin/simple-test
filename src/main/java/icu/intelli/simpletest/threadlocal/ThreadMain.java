@@ -18,6 +18,10 @@ public class ThreadMain {
         poolTransmittableThreadLocal();
     }
 
+    private static void threadLocal() {
+        ThreadLocalUtil.set(new Person());
+    }
+
     private static void inheritableThreadLocal() {
         InheritableThreadLocalUtil.set("666");
         for (int i = 0; i < 10; i++) {
