@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://182.92.233.246:5432/postgres
+    username: postgres
+    password: swang-harbin
+  jpa:
+    database: postgresql
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQL10Dialect
+      temp:
+        use_jdbc_metadata_defaults: false
